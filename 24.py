@@ -1,47 +1,100 @@
 
 
 def solve_24(m,n,o,p):
+	sort = [[n, p, o, m], [n, p, m, o], [n, m, p, o], [n, m, o, p], [n, o, m, p], [n, o, p, m], [o, m, p, n], [o, m, n, p], [o, n, m, p], [o, n, p, m], [o, p, n, m], [o, p, m, n], [p, n, m, o], [p, n, o, m], [p, o, n, m], [p, o, m, n], [p, m, o, n], [p, m, n, o], [m, o, n, p], [m, o, p, n], [m, p, o, n], [m, p, n, o], [m, n, p, o], [m, n, o, p]]
 	fu = []
 	ans = []
-	a = [m,n,o,p]
-	for i in range(4):
-		a.append(a[0])
-		a.pop(0)
-		for i1 in range(3):
-			a.insert(1,a[2])
-			a.pop(3)
-			n = suan(a)
-			if n:
-				if not n in fu:
-					fu.append(n)
-					an = [a[0],n[0],a[1],n[1],a[2],n[2],a[3]]
-					if n[-1] == -1:
-						an.append('b')
-					elif n[-1] == -2:
-						an.append('c')
-					else:
-						an.append('a')					
-					ans.append(an)
+	# a = [m,n,o,p]
 
-			a.append(a[2])
-			a.pop(2)
-			n = suan(a)
-			if n:
-				if not n in fu:
-					fu.append(n)
-					an = [a[0],n[0],a[1],n[1],a[2],n[2],a[3]]
-					if n[-1] == -1:
-						an.append('b')
-					elif n[-1] == -2:
-						an.append('c')
-					else:
-						an.append('a')					
-					ans.append(an)
+	for i in sort:
+		n = suan(i,fu)
+		if n:
+				fu.append(n)
+				an = [i[0],n[0],i[1],n[1],i[2],n[2],i[3]]
+				if n[-1] == -1:
+					an.append('b')
+				elif n[-1] == -2:
+					an.append('c')
+				else:
+					an.append('a')					
+				ans.append(an)
+	
+	# for i in range(4):
+	# 	a.append(a[0])
+	# 	a.pop(0)
+	# 	for i1 in range(3):
+	# 		a.insert(1,a[2])
+	# 		a.pop(3)
+	# 		n = suan(a,fu)
+	# 		if n:
+	# 			fu.append(n)
+	# 			an = [a[0],n[0],a[1],n[1],a[2],n[2],a[3]]
+	# 			if n[-1] == -1:
+	# 				an.append('b')
+	# 			elif n[-1] == -2:
+	# 				an.append('c')
+	# 			else:
+	# 				an.append('a')					
+	# 			ans.append(an)
+
+	# 		a.append(a[2])
+	# 		a.pop(2)
+	# 		n = suan(a,fu)
+	# 		if n:
+	# 			fu.append(n)
+	# 			an = [a[0],n[0],a[1],n[1],a[2],n[2],a[3]]
+	# 			if n[-1] == -1:
+	# 				an.append('b')
+	# 			elif n[-1] == -2:
+	# 				an.append('c')
+	# 			else:
+	# 				an.append('a')					
+	# 			ans.append(an)
 	return ans
 	# print(ans)
 
 
-def suan(a):
+def suan(a,fu):
+
+	for i in range(2):
+		if i == 0:
+			ans1 = a[0]+a[1]
+		elif i == 1:
+			ans1 = a[0]-a[1]
+		for i1 in range(2):
+			if i1 == 0:
+				ans2 = a[2]+a[3]
+			elif i1 == 1:
+				ans2 = a[2]-a[3]
+			if ans1*ans2 == 24:
+				anss = i,2,i1,-2
+				if not anss in fu:
+						return anss	
+
+	for i in range(2):
+		if i == 0:
+			ans1 = a[1]+a[2]
+		elif i == 1:
+			ans1 = a[1]-a[2]
+		for i1 in range(2):
+			if i1 == 0:
+				ans2 = a[0]*ans1
+			elif i1 == 1 and ans1 != 0:
+					ans2 = a[0]/ans1
+			for i2 in range(4):
+				if i2 == 0:
+					ans3 = ans2+a[3]
+				elif i2 == 1:
+					ans3 = ans2-a[3]
+				elif i2 == 2:
+					ans3 = ans2*a[3]
+				elif i2 == 3 and a[3] != 0:
+					ans3 = ans2/a[3]
+				if ans3 == 24:
+					anss = i1+2,i,i2,-1
+					if not anss in fu:
+						return anss
+
 	for i in range(4):
 		if i == 0:
 			ans1 = a[0]+a[1]
@@ -70,44 +123,9 @@ def suan(a):
 				elif i2 == 3 and a[3] != 0:
 					ans3 = ans2/a[3]
 				if ans3 == 24:
-					return i,i1,i2,0
-
-	for i in range(2):
-		if i == 0:
-			ans1 = a[1]+a[2]
-		elif i == 1:
-			ans1 = a[1]-a[2]
-		for i1 in range(2):
-			if i1 == 0:
-				ans2 = a[0]*ans1
-			elif i1 == 1 and ans1 != 0:
-					ans2 = a[0]/ans1
-			for i2 in range(4):
-				if i2 == 0:
-					ans3 = ans2+a[3]
-				elif i2 == 1:
-					ans3 = ans2-a[3]
-				elif i2 == 2:
-					ans3 = ans2*a[3]
-				elif i2 == 3 and a[3] != 0:
-					ans3 = ans2/a[3]
-				if ans3 == 24:
-					return i1+2,i,i2,-1
-
-	for i in range(2):
-		if i == 0:
-			ans1 = a[0]+a[1]
-		elif i == 1:
-			ans1 = a[0]-a[1]
-		for i1 in range(2):
-			if i1 == 0:
-				ans2 = a[2]+a[3]
-			elif i1 == 1:
-				ans2 = a[2]-a[3]
-			if ans1*ans2 == 24:
-				return i,2,i1,-2
-
-
+					anss = i,i1,i2,0
+					if not anss in fu:
+						return anss
 
 def fy(a):
 	ans = []
@@ -146,7 +164,7 @@ def fy(a):
 	return ans
 
 if __name__ == '__main__':
-	a = solve_24(3,8,7,8)
+	a = solve_24(3,5,8,8)
 	ans = fy(a)
 	for i in ans:
 		print(i)
